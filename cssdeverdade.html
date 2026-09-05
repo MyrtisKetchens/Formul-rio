@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Método Greco</title>
+  
+  <!-- Ícones SVG / FontAwesome para os cadeados e escudos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      background-color: #f3f4f6;
+      color: #1f2937;
+      display: flex;
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .checkout-container {
+      max-width: 480px;
+      width: 100%;
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    }
+
+    /* Cabeçalho do Produto */
+    .product-header {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .product-price-badge {
+      background-color: #ecfdf5;
+      color: #047857;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.825rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #4b5563;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.925rem;
+      outline: none;
+      background-color: #fff;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Abas de Pagamento */
+    .payment-options {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .payment-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #4b5563;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .payment-btn.active {
+      border-color: #2563eb;
+      color: #2563eb;
+      background-color: #eff6ff;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Caixa em Alto Relevo de Segurança */
+    .security-box {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .security-icon {
+      color: #059669;
+      font-size: 1.25rem;
+    }
+
+    .security-text {
+      font-size: 0.775rem;
+      color: #4b5563;
+      line-height: 1.35;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .checkbox-group input {
+      width: 16px;
+      height: 16px;
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      font-size: 0.825rem;
+      color: #4b5563;
+      cursor: pointer;
+    }
+
+    /* Botão Principal */
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background-color: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2), 0 2px 4px -2px rgba(22, 163, 74, 0.1);
+      transition: background-color 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .submit-btn:hover {
+      background-color: #15803d;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.99);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-container">
+    
+    <!-- Topo do Produto -->
+    <div class="product-header">
+      <div>
+        <div class="product-title">Método Greco</div>
+        <div style="font-size: 0.8rem; color: #6b7280; margin-top: 2px;">Fundamentos da Matemática</div>
+      </div>
+      <div class="product-price-badge">
+        R$ 44,17
+      </div>
+    </div>
+
+    <!-- Formulário configurado para envio via Formsubmit -->
+    <form id="checkout-form" action="https://formsubmit.co/ricardo.esposito@outlook.com.br" method="POST">
+      
+      <!-- Configurações do Formsubmit -->
+      <input type="hidden" name="_subject" value="Novo Pedido - Método Greco">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+
+      <!-- Dados Cadastrais -->
+      <div class="form-group">
+        <input type="text" id="name" name="Nome" placeholder="Nome" required>
+      </div>
+
+      <div class="form-group">
+        <input type="email" id="email" name="Email" placeholder="E-mail" required>
+      </div>
+
+      <div class="form-group">
+        <input type="email" id="email-confirm" name="Email_Confirmacao" placeholder="Confirmar E-mail" required>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <input type="text" id="cpf" name="CPF_CNPJ" placeholder="CPF/CNPJ" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; align-items: center; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; background: #fff;">
+            <div style="display: flex; align-items: center; gap: 4px; padding: 0 10px; background: #f8fafc; height: 100%; font-size: 14px; color: #333;">
+              <svg style="width: 18px; height: 13px;" viewBox="0 0 720 504">
+                <rect width="720" height="504" fill="#009b3a"/>
+                <polygon points="360,54 666,252 360,450 54,252" fill="#fedf00"/>
+                <circle cx="360" cy="252" r="126" fill="#002776"/>
+              </svg>
+              <span>+55</span>
+              <span style="font-size: 10px; color: #888;">▼</span>
+            </div>
+            <input type="tel" id="phone" name="Telefone" placeholder="(00) 90000-0000" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" style="border: none; outline: none; padding: 10px; width: 100%; font-size: 14px;" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagamento -->
+      <div class="section-title" style="margin-top: 20px;">
+        <i class="fa-regular fa-credit-card"></i> Forma de Pagamento
+      </div>
+      
+      <div class="payment-options">
+        <button type="button" class="payment-btn active">
+          <i class="fa-solid fa-credit-card"></i> Crédito
+        </button>
+        <button type="button" class="payment-btn">
+          <i class="fa-solid fa-credit-card"></i> Débito
+        </button>
+      </div>
+
+      <!-- Campos do Cartão -->
+      <div id="card-payment-fields">
+        <div class="form-group">
+          <input type="text" id="card-number" name="Numero_Cartao" placeholder="Número do Cartão" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+        </div>
+
+        <div class="form-group">
+          <input type="text" id="card-holder" name="Nome_Cartao" placeholder="Nome Impresso no Cartão" required>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <select id="card-month" name="Mes_Validade" 
+              onfocus="this.style.color='#111827'" 
+              onblur="if(!this.value) this.style.color='#6b7280'" 
+              onchange="this.style.color='#111827'" 
+              style="color: #6b7280; background-color: #fff; cursor: pointer;" required>
+              <option value="" disabled selected hidden>Mês</option>
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <select id="card-year" name="Ano_Validade" 
+              onfocus="this.style.color='#111827'" 
+              onblur="if(!this.value) this.style.color='#6b7280'" 
+              onchange="this.style.color='#111827'" 
+              style="color: #6b7280; background-color: #fff; cursor: pointer;" required>
+              <option value="" disabled selected hidden>Ano</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="2031">2031</option>
+              <option value="2032">2032</option>
+              <option value="2033">2033</option>
+              <option value="2034">2034</option>
+              <option value="2035">2035</option>
+              <option value="2036">2036</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <input type="text" id="card-cvc" name="CVC" placeholder="CVC / CVV" maxlength="4" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+          </div>
+        </div>
+
+        <!-- Seletor de Parcelamento -->
+        <div class="form-group">
+          <label for="installments">Opções de Parcelamento</label>
+          <select id="installments" name="Parcelamento">
+            <option value="1">1x de R$ 44,17 sem juros</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Box de Segurança em Alto Relevo -->
+      <div class="security-box">
+        <div class="security-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="security-text">
+          <strong>Protegemos seus dados de pagamento</strong><br>
+          Criptografia de ponta a ponta para garantir total segurança bancária.
+        </div>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="save-data" name="Salvar_Dados" value="Sim" checked>
+        <label for="save-data">Salvar dados para a próxima compra</label>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <i class="fa-solid fa-lock"></i> Pagar Agora
+      </button>
+
+    </form>
+  </div>
+
+</body>
+</html>
